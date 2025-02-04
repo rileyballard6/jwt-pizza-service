@@ -1,4 +1,4 @@
-{
+module.exports = {
     "collectCoverage": true,
     "coverageReporters": ["json-summary", "text"],
     "coverageThreshold": {
@@ -6,4 +6,4 @@
         "lines": 80
       }
     }
-  }
+};
