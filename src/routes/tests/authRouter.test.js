@@ -11,6 +11,8 @@ beforeAll(async () => {
   expectValidJwt(testUserAuthToken);
 });
 
+
+//test login endpoint
 test('login', async () => {
   const loginRes = await request(app).put('/api/auth').send(testUser);
   expect(loginRes.status).toBe(200);
@@ -20,6 +22,17 @@ test('login', async () => {
   delete expectedUser.password;
   expect(loginRes.body.user).toMatchObject(expectedUser);
 });
+
+//test logout endpoint
+test('logout', async () => {
+  return;
+})
+
+
+//test updateUser endpoint
+test('updateUser', async () => {
+  return;
+})
 
 function expectValidJwt(potentialJwt) {
   expect(potentialJwt).toMatch(/^[a-zA-Z0-9\-_]*\.[a-zA-Z0-9\-_]*\.[a-zA-Z0-9\-_]*$/);
