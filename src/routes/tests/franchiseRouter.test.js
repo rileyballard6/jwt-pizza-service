@@ -1,6 +1,6 @@
 const request = require("supertest");
 const app = require("../../service");
-const { Role, DB } = require("../database/database.js");
+const { Role, DB } = require("../../database/database.js");
 
 const testUser = { name: "pizza diner", email: "reg@test.com", password: "a" };
 let testUserAuthToken;
@@ -55,3 +55,7 @@ async function createAdminUser() {
   user = await DB.addUser(user);
   return { ...user, password: "toomanysecrets" };
 }
+
+function expectValidJwt(potentialJwt) {
+    expect(potentialJwt).toMatch(/^[a-zA-Z0-9\-_]*\.[a-zA-Z0-9\-_]*\.[a-zA-Z0-9\-_]*$/);
+  }

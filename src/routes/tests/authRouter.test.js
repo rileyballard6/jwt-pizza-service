@@ -1,5 +1,7 @@
 const request = require('supertest');
 const app = require('../../service');
+const { Role, DB } = require("../../database/database.js");
+
 
 const testUser = { name: 'pizza diner', email: 'reg@test.com', password: 'a' };
 let testUserAuthToken;
@@ -25,7 +27,11 @@ test('login', async () => {
 
 //test logout endpoint
 test('logout', async () => {
-  return;
+  const logoutRes = await request(app).delete('/api/auth').set('Authorization', `Bearer ${testUserAuthToken}`);
+  expect(logoutRes.status).toBe(200);
+
+  const expectedResponse = { message: 'logout successful' };
+  expect(logoutRes.body).toMatchObject(expectedResponse);
 })
 
 
