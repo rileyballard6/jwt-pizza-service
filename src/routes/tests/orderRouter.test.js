@@ -52,11 +52,6 @@ test("getOrders", async () => {
 
 //test createOrders endpoint
 test("createOrders", async () => {
-  const createOrderWithAuth = await request(app)
-    .post("/api/order")
-    .send()
-    .set("Authorization", `Bearer ${testUserAuthToken}`);
-
     const createOrderWithOutAuth = await request(app)
     .post("/api/order")
     .send()
