@@ -37,7 +37,9 @@ test('logout', async () => {
 
 //test updateUser endpoint
 test('updateUser', async () => {
-  return;
+  const updateUserResult = await request(app).put("/api/auth/12345").set('Authorization', `Bearer ${testUserAuthToken}`);
+
+  expect(updateUserResult.status).toBe(401);
 })
 
 function expectValidJwt(potentialJwt) {

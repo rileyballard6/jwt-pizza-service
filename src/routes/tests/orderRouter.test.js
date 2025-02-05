@@ -2,38 +2,69 @@ const request = require("supertest");
 const app = require("../../service");
 const { Role, DB } = require("../../database/database.js");
 
-
-const testUser = { name: "pizza diner", email: "reg@test.com", password: "a" };
 let testUserAuthToken;
 
 beforeAll(async () => {
-  testUser.email = Math.random().toString(36).substring(2, 12) + "@test.com";
-  const registerRes = await request(app).post("/api/auth").send(testUser);
-  testUserAuthToken = registerRes.body.token;
+  const testUser = await createAdminUser();
+  const loginRes = await request(app).put("/api/auth").send(testUser);
+  testUserAuthToken = loginRes.body.token;
   expectValidJwt(testUserAuthToken);
 });
 
 //test getMenu endpoint
 test("getMenu", async () => {
-  return;
+  const addMenuItemResult = await request(app)
+    .get("/api/order/menu")
+    .set("Authorization", `Bearer ${testUserAuthToken}`);
+
+  expect(addMenuItemResult.status).toBe(200);
+  expect(addMenuItemResult.body).toBeInstanceOf(Array);
 });
 
 //test addMenuItem endpoint
 test("addMenuItem", async () => {
-  return;
+  const menuItem = {
+    title: "new pizza",
+    description: "new pizza description",
+    image: "image9.png",
+    price: 1.5,
+  };
+
+  const addMenuItemResult = await request(app)
+    .put("/api/order/menu")
+    .send(menuItem)
+    .set("Authorization", `Bearer ${testUserAuthToken}`);
+
+  expect(addMenuItemResult.status).toBe(200);
+  expect(addMenuItemResult.body).toBeInstanceOf(Array);
 });
 
 //test getOrders endpoint
 test("getOrders", async () => {
+  const getOrdersResult = await request(app)
+    .get("/api/order")
+    .set("Authorization", `Bearer ${testUserAuthToken}`);
+
+  expect(getOrdersResult.status).toBe(200);
+  expect(getOrdersResult.body).toBeInstanceOf(Object);
   return;
 });
 
 //test createOrders endpoint
 test("createOrders", async () => {
-  return;
+  const createOrderWithAuth = await request(app)
+    .post("/api/order")
+    .send()
+    .set("Authorization", `Bearer ${testUserAuthToken}`);
+
+    const createOrderWithOutAuth = await request(app)
+    .post("/api/order")
+    .send()
+
+    expect(createOrderWithOutAuth.status).toBe(401);
+
+    
 });
-
-
 
 //Helper functions to create random Names and Admin users etc.
 function randomName() {
@@ -50,5 +81,7 @@ async function createAdminUser() {
 }
 
 function expectValidJwt(potentialJwt) {
-  expect(potentialJwt).toMatch(/^[a-zA-Z0-9\-_]*\.[a-zA-Z0-9\-_]*\.[a-zA-Z0-9\-_]*$/);
+  expect(potentialJwt).toMatch(
+    /^[a-zA-Z0-9\-_]*\.[a-zA-Z0-9\-_]*\.[a-zA-Z0-9\-_]*$/
+  );
 }
