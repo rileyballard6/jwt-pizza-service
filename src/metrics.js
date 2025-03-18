@@ -1,22 +1,67 @@
 // const config = require("./config.js");
 // const os = require("os");
 
-let requests = {};
-let authSuccess = 0;
-let authFail = 0;
+// let requests = {};
 
-//HTTP Requests
-function getRequests() {
-  return (req, res, next) => {
-    requests[req.method] = (requests[req.method] || 0) + 1;
-    next();
-  };
-}
+// let authSuccess = 0;
+// let authFail = 0;
 
-//Authentication Requests
-function authenticationRequests(status) {
-    status == true ? authSuccess += 1 : authFail += 1;
-}
+// let pizzaPurchases = 0;
+// let pizzaFailure = 0;
+// let revenue = 0;
+
+// let activeUsers = {};
+
+// let service_latency = 0;
+// let pizza_latency = 0;
+
+// //HTTP Requests
+// function getRequests() {
+//   return (req, res, next) => {
+//     requests[req.method] = (requests[req.method] || 0) + 1;
+//     next();
+//   };
+// }
+
+// //Authentication Requests
+// function authenticationRequests(status) {
+//   status == true ? (authSuccess += 1) : (authFail += 1);
+// }
+
+// //Pizza ordering Success, Failure, Revenue
+// function pizzaOrderTracking(order, success) {
+//   if (success == false) {
+//     pizzaFailure += 1;
+//     return;
+//   } else {
+//     pizzaPurchases += 1;
+//     for (let i = 0; i < order.items.length; i++) {
+//       revenue += order.items[i].price;
+//     }
+//   }
+// }
+
+// //Track Active users
+// const trackActiveUsers = (req, res, next) => {
+//   const userId = req.user ? req.user.id : req.sessionID;
+
+//   if (userId) {
+//     activeUsers[userId] = Date.now();
+//   }
+
+//   next();
+// };
+
+// const removeInactiveUsers = () => {
+//   const now = Date.now();
+
+//   for (const [userId, lastActivityTime] of activeUsers) {
+//     if (now - lastActivityTime > TIMEOUT_THRESHOLD) {
+//       activeUsers.delete(userId);
+//       console.log(`Removed inactive user: ${userId}`);
+//     }
+//   }
+// };
 
 // //CPU Usage
 // function getCpuUsagePercentage() {
@@ -122,7 +167,9 @@ function authenticationRequests(status) {
 //     });
 // }
 
-module.exports = {
-  getRequests,
-  authenticationRequests
-};
+// module.exports = {
+//   getRequests,
+//   authenticationRequests,
+//   pizzaOrderTracking,
+//   trackActiveUsers
+// };
