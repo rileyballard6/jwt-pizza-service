@@ -42,17 +42,30 @@
 // }
 
 // //Track Active users
-// const trackActiveUsers = (req, res, next) => {
-//   const userId = req.user ? req.user.id : req.sessionID;
+// function trackActiveUsers() {
+//   return (req, res, next) => {
+//     const userId = req.user ? req.user.id : req.sessionID;
 
-//   if (userId) {
-//     activeUsers[userId] = Date.now();
-//   }
+//     if (userId) {
+//       activeUsers[userId] = Date.now();
+//     }
 
-//   next();
-// };
+//     next();
+//   };
+// }
 
-// const removeInactiveUsers = () => {
+// function measureServiceLatency() {
+//   return (req, res, next) => {
+//     const startTime = Date.now();
+
+//     res.on("finish", () => {
+//       const endTime = Date.now();
+//       const latency = endTime - startTime;
+//     });
+//   };
+// }
+
+// function removeInactiveUsers() {
 //   const now = Date.now();
 
 //   for (const [userId, lastActivityTime] of activeUsers) {
@@ -61,7 +74,7 @@
 //       console.log(`Removed inactive user: ${userId}`);
 //     }
 //   }
-// };
+// }
 
 // //CPU Usage
 // function getCpuUsagePercentage() {
@@ -81,7 +94,7 @@
 // setInterval(() => {
 //   // HTTP requests by method/minute
 //   Object.keys(requests).forEach((method) => {
-//     sendMetricToGrafana("requests", requests[method], "sum", "1", {method});
+//     sendMetricToGrafana("requests", requests[method], "sum", "1", { method });
 //   });
 
 //   //Authentication per minute
@@ -92,7 +105,6 @@
 //   sendMetricToGrafana("cpu", getCpuUsagePercentage(), "gauge", "%");
 //   // Memory Usage
 //   sendMetricToGrafana("memory", getMemoryUsagePercentage(), "gauge", "%");
-
 // }, 60000);
 
 // function sendMetricToGrafana(
@@ -171,5 +183,5 @@
 //   getRequests,
 //   authenticationRequests,
 //   pizzaOrderTracking,
-//   trackActiveUsers
+//   trackActiveUsers,
 // };
