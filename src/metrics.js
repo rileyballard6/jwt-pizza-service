@@ -1,9 +1,12 @@
-const config = require('./config.js');
+const config = require("./config.js");
 const os = require("os");
 
 let latency = 0;
 let requests = {};
+let authSuccess = 0;
+let authFail = 0;
 
+//HTTP Requests
 function getRequests() {
   return (req, res, next) => {
     requests[req.method] = (requests[req.method] || 0) + 1;
@@ -11,11 +14,18 @@ function getRequests() {
   };
 }
 
+//Authentication Requests
+function authenticationRequests(status) {
+    status == true ? authSuccess += 1 : authFail += 1;
+}
+
+//CPU Usage
 function getCpuUsagePercentage() {
   const cpuUsage = os.loadavg()[0] / os.cpus().length;
   return cpuUsage.toFixed(2) * 100;
 }
 
+//Memory Usage
 function getMemoryUsagePercentage() {
   const totalMemory = os.totalmem();
   const freeMemory = os.freemem();
@@ -24,22 +34,30 @@ function getMemoryUsagePercentage() {
   return memoryUsage.toFixed(2);
 }
 
-// setInterval(() => {
-//   // HTTP requests by method/minute
-//   Object.keys(requests).forEach((method) => {
-//     sendMetricToGrafana("requests", requests[method], "sum", "1", {method});
-//   });
+setInterval(() => {
+  // HTTP requests by method/minute
+  Object.keys(requests).forEach((method) => {
+    sendMetricToGrafana("requests", requests[method], "sum", "1", {method});
+  });
 
-//   //CPU Usage
-//   sendMetricToGrafana("cpu", getCpuUsagePercentage(), "gauge", "%");
-//   // Memory Usage
-//   sendMetricToGrafana("memory", getMemoryUsagePercentage(), "gauge", "%");
+  //Authentication per minute
+  sendMetricToGrafana("auth_success", authSuccess, "sum", "1");
+  sendMetricToGrafana("auth_fail", authFail, "sum", "1");
 
-// //   latency += Math.floor(Math.random() * 200) + 1;
-// //   sendMetricToGrafana("latency", latency, "sum", "ms");
-// }, 10000);
+  //CPU Usage
+  sendMetricToGrafana("cpu", getCpuUsagePercentage(), "gauge", "%");
+  // Memory Usage
+  sendMetricToGrafana("memory", getMemoryUsagePercentage(), "gauge", "%");
 
-function sendMetricToGrafana(metricName, metricValue, type, unit, attributes = {}) {
+}, 60000);
+
+function sendMetricToGrafana(
+  metricName,
+  metricValue,
+  type,
+  unit,
+  attributes = {}
+) {
   const metric = {
     resourceMetrics: [
       {
@@ -107,4 +125,5 @@ function sendMetricToGrafana(metricName, metricValue, type, unit, attributes = {
 
 module.exports = {
   getRequests,
+  authenticationRequests
 };
