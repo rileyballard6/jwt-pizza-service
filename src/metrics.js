@@ -1,7 +1,6 @@
 const config = require("./config.js");
 const os = require("os");
 
-let latency = 0;
 let requests = {};
 let authSuccess = 0;
 let authFail = 0;
