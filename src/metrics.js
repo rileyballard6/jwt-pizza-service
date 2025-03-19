@@ -15,7 +15,6 @@ let activeUsers = {};
 let latency = 0;
 let pizza_latency = 0;
 
-
 //HTTP Requests
 function getRequests() {
   return (req, res, next) => {
@@ -26,7 +25,11 @@ function getRequests() {
 
 //Authentication Requests
 function authenticationRequests(status) {
-  status == true ? (authSuccess += 1) : (authFail += 1);
+  if (status === true) {
+    authSuccess += 1;
+  } else {
+    authFail += 1;
+  }
 }
 
 //Pizza ordering Success, Failure, Revenue
@@ -69,7 +72,7 @@ function measureServiceLatency() {
 }
 
 function measurePizzaLatency() {
-  return (req,res,next) => {
+  return (req, res, next) => {
     const startTime = Date.now();
 
     res.on("finish", () => {
@@ -78,7 +81,7 @@ function measurePizzaLatency() {
     });
 
     next();
-  }
+  };
 }
 
 function removeInactiveUsers() {
@@ -245,5 +248,5 @@ module.exports = {
   measurePizzaLatency,
   getCpuUsagePercentage,
   getMemoryUsagePercentage,
-  getRequestTotal
+  getRequestTotal,
 };

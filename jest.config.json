@@ -6,5 +6,6 @@
     "global": {
       "lines": 80
     }
-  }
+  },
+  "testPathIgnorePatterns": ["<rootDir>/dist/"]
 }
