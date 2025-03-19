@@ -242,5 +242,8 @@ module.exports = {
   pizzaOrderTracking,
   trackActiveUsers,
   measureServiceLatency,
-  measurePizzaLatency
+  measurePizzaLatency,
+  getCpuUsagePercentage,
+  getMemoryUsagePercentage,
+  getRequestTotal
 };

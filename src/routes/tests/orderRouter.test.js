@@ -57,8 +57,19 @@ test("createOrders", async () => {
     .send()
 
     expect(createOrderWithOutAuth.status).toBe(401);
-
     
+});
+
+test("createOrdersWithAuth", async () => {
+  const exampleOrder = {"franchiseId": 1, "storeId":1, "items":[{ "menuId": 1, "description": "Veggie", "price": 0.05 }]}
+  const getOrdersResult = await request(app)
+  .post("/api/order")
+  .set("Authorization", `Bearer ${testUserAuthToken}`)
+  .set("Content-Type", "application/json")
+  .send(exampleOrder);
+
+  expect(getOrdersResult.status).toBe(200);
+
 });
 
 //Helper functions to create random Names and Admin users etc.
