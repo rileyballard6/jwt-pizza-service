@@ -4,9 +4,11 @@ const orderRouter = require('./routes/orderRouter.js');
 const franchiseRouter = require('./routes/franchiseRouter.js');
 const version = require('./version.json');
 const config = require('./config.js');
-const metrics = require('./metrics.js')
+const metrics = require('./metrics.js');
+const Logger = require('pizza-logger')
 
 const app = express();
+const logger = new Logger(config);
 
 app.use(express.json());
 app.use(setAuthUser);
@@ -17,6 +19,8 @@ app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   next();
 });
+
+app.use(logger.httpLogger);
 
 app.use(metrics.getRequests());
 app.use(metrics.trackActiveUsers());

@@ -5,6 +5,10 @@ const { authRouter } = require('./authRouter.js');
 const { asyncHandler, StatusCodeError } = require('../endpointHelper.js');
 const metrics = require("../metrics.js");
 
+const Logger = require("pizza-logger");
+
+const logger = new Logger(config);
+
 const orderRouter = express.Router();
 
 orderRouter.endpoints = [
@@ -89,6 +93,7 @@ orderRouter.post(
     const j = await r.json();
     if (r.ok) {
       metrics.pizzaOrderTracking(order, true);
+      logger.factoryLogger(order);
       res.send({ order, reportSlowPizzaToFactoryUrl: j.reportUrl, jwt: j.jwt });
     } else {
       metrics.pizzaOrderTracking(order, false);
