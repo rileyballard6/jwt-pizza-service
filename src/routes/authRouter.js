@@ -121,6 +121,10 @@ authRouter.put(
 
 async function setAuth(user) {
   const token = jwt.sign(user, config.jwtSecret);
+  const isAlreadyLoggedIn = await DB.isLoggedIn(token);
+  if (isAlreadyLoggedIn) {
+    return token;
+  }
   await DB.loginUser(user.id, token);
   return token;
 }
